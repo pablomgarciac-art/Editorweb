@@ -2,9 +2,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Poppins:wght@400;600;700&family=Playfair+Display:wght@600;700&family=Lora:wght@400;600&family=DM+Sans:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap">
 <style>
 /* Concepto: barra superior, raíl azul pizarra, cajón de herramientas, lienzo con secciones punteadas y panel de propiedades */
-:root{--rail:#414d63;--rail-ink:#c9d1de;--accent:#1db4e8;--bg:#e3e8ef;--panel:#f5f7fa;--panel-2:#ffffff;--line:#d3dae5;--ink:#2b3445;--mute:#66738a;--danger:#d64550;--dash:#2f7fc1;--inbg:#ffffff;--inbd:#9db2c3;--hd:#0b6f9c;--hdl:#0b6f9c;--hdbg:#e4f3fa;color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--rail:#3f4550;--rail-ink:#c9ced8;--bg:#2b2f36;--panel:#363b44;--panel-2:#40464f;--line:#505763;--ink:#eceff4;--mute:#a9b0bc;--dash:#5fb0f0;--inbg:#1f2328;--inbd:#7d8797;--hd:#1d6f94;--hdl:#7fd0f5;--hdbg:#3a4755;color-scheme:dark}}
-:root[data-theme="dark"]{--inbg:#1f2328;--inbd:#7d8797;--hd:#1d6f94;--hdl:#7fd0f5;--hdbg:#3a4755;--rail:#3f4550;--rail-ink:#c9ced8;--bg:#2b2f36;--panel:#363b44;--panel-2:#40464f;--line:#505763;--ink:#eceff4;--mute:#a9b0bc;--dash:#5fb0f0;color-scheme:dark}
+:root{--rail:#66769a;--rail-ink:#eef2f9;--accent:#1db4e8;--bg:#e3e8ef;--panel:#f5f7fa;--panel-2:#ffffff;--line:#d3dae5;--ink:#2b3445;--mute:#66738a;--danger:#d64550;--dash:#2f7fc1;--inbg:#ffffff;--inbd:#9db2c3;--hd:#0b6f9c;--hdl:#0b6f9c;--hdbg:#e4f3fa;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--rail:#525a68;--rail-ink:#eceff5;--bg:#2b2f36;--panel:#363b44;--panel-2:#40464f;--line:#505763;--ink:#eceff4;--mute:#a9b0bc;--dash:#5fb0f0;--inbg:#1f2328;--inbd:#7d8797;--hd:#1d6f94;--hdl:#7fd0f5;--hdbg:#3a4755;color-scheme:dark}}
+:root[data-theme="dark"]{--inbg:#1f2328;--inbd:#7d8797;--hd:#1d6f94;--hdl:#7fd0f5;--hdbg:#3a4755;--rail:#525a68;--rail-ink:#eceff5;--bg:#2b2f36;--panel:#363b44;--panel-2:#40464f;--line:#505763;--ink:#eceff4;--mute:#a9b0bc;--dash:#5fb0f0;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.4 'Nunito Sans',system-ui,sans-serif;overflow:hidden}
@@ -130,8 +130,8 @@ textarea{resize:vertical;min-height:64px}
 .etb .sep{width:1px;align-self:stretch;background:var(--line);margin:3px 4px}
 .sbar{position:absolute;left:6px;top:6px;z-index:9;display:none;align-items:center;gap:2px;padding:4px 6px 4px 12px;background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:8px;font:600 13px 'Nunito Sans',sans-serif;box-shadow:0 3px 10px rgba(0,0,0,.2);cursor:default}
 .sec:hover>.sbar,.sec.selsec>.sbar,.sec.actsec>.sbar{display:flex}
-.pgsel{display:flex;align-items:center;gap:8px;margin-left:14px;padding:0 6px 0 12px;height:42px;border:1px solid var(--line);border-radius:10px;background:var(--panel-2);color:var(--ink)}
-.pgsel select{font:600 16px inherit;font-family:inherit;border:0;background:var(--panel-2);color:var(--ink);height:40px;max-width:240px;cursor:pointer;outline:0;padding-right:4px}.pgsel option{background:var(--panel-2);color:var(--ink)}
+.pgsel{display:flex;align-items:center;gap:8px;margin-left:14px;padding:0 6px 0 12px;height:42px;border:2px solid var(--hd);border-radius:10px;background:var(--hdbg);color:var(--hdl)}
+.pgsel select{font:700 16px inherit;font-family:inherit;border:0;background:transparent;color:var(--hdl);height:40px;max-width:240px;cursor:pointer;outline:0;padding-right:4px}.pgsel option{background:var(--panel-2);color:var(--ink);font-weight:600}
 .sbar{zoom:1.25}
 .sbar{background:#1f2937!important;color:#fff!important;border-color:#0b1220!important}
 .sbar .ib{color:#e5e7eb}.sbar .ib:hover{background:#374151;color:#fff}
