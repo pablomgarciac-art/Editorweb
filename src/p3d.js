@@ -64,7 +64,7 @@ function openPublish(){
  ${weak?`<p style="font-weight:600">${weak} página${weak===1?' tiene':'s tienen'} mejoras SEO pendientes.</p>`:''}
  <div class="row" style="margin:6px 0 12px"><button class="b" data-act="seo">${svg('search',16)}Revisar SEO</button></div>
  <div class="dg">Archivos</div>
- <div class="pubf">${pubFiles.map((f,k)=>`<div class="li"><div class="lab">${esc(f.name)}<small>${kb(f)}${f.p?' · SEO '+seoScore(f.p)+'%':''}</small></div><button class="b sm" data-act="copyfile" data-i="${k}">Copiar</button></div>`).join('')}</div>
+ <div class="pubf">${pubFiles.map((f,k)=>`<div class="li"><div class="lab">${esc(f.name)}<small>${kb(f)}${f.p?' · SEO '+seoScore(f.p)+'%':''}</small></div>${typeof f.data==='string'?`<button class="b sm" data-act="copyfile" data-i="${k}">Copiar</button>`:'<small>imagen</small>'}</div>`).join('')}</div>
  <div class="row" style="margin-top:12px"><button class="b pri" data-act="dlzip">${svg('save',16)}Descargar ZIP</button><button class="b" data-act="modalclose">Cerrar</button></div>
  <ol style="padding-left:20px;margin:12px 0 4px"><li>Descarga el ZIP y descomprímelo.</li><li>Sube todos los archivos a tu hosting, Netlify o GitHub Pages (la página de inicio es <b>index.html</b>).</li><li>En Google Search Console envía tu <b>sitemap.xml</b>.</li></ol>
  <p class="hint">Si la descarga no funciona aquí, copia cada archivo con «Copiar» y pégalo en un archivo con ese nombre. Los mapas, vídeos y el envío de formularios solo funcionan en la web ya publicada.</p></div>`;
@@ -83,8 +83,10 @@ function act(a,b){
  case 'publish':openPublish();break;
  case 'seo':openSeo(id||ui.pageId);break;
  case 'seodone':$('#modal').hidden=true;renderAll();break;
+ case 'seoup':seoPick(b.dataset.w);break;
+ case 'seorm':seoSetImg(b.dataset.w,'');break;
  case 'dlzip':downloadZip();break;
- case 'copyfile':{const f=pubFiles[+b.dataset.i];if(f)copyText(f.data);break}
+ case 'copyfile':{const f=pubFiles[+b.dataset.i];if(f&&typeof f.data==='string')copyText(f.data);break}
  case 'modalclose':$('#modal').hidden=true;break;
  case 'copyhtml':copyText($('#pubCode').value,$('#pubCode'));break;
  case 'panel':if(ui.drawer&&ui.panel===b.dataset.p)ui.drawer=false;else{ui.panel=b.dataset.p;ui.drawer=true}renderRail();renderDrawer();break;

@@ -136,7 +136,7 @@ const FIT=['icon','btnicon','btntext','btn','btnti','social','social1','shape'];
 const NOLINK=['social','social1','html','form','map','video','reviews'];
 const TXT=['h1','h2','h3','p'];
 
-let mnN=0,exportPg=null,pubFiles=[];
+let mnN=0,exportPg=null,pubFiles=[],exportImgs={};
 const col=v=>({c1:'var(--c1)',c2:'var(--c2)',ink:'var(--ink)',bg:'var(--bg)'}[v]||v||'');
 const hexOf=(v,fb='#000000')=>{const m={c1:S.design.c1,c2:S.design.c2,ink:S.design.ink,bg:S.design.bg};let x=v||fb;x=m[x]||x;return /^#[0-9a-f]{6}$/i.test(x)?x:'#000000'};
 const vars=()=>{const d=S.design;return `--c1:${d.c1};--c2:${d.c2};--bg:${d.bg};--ink:${d.ink};--fh:${fnt(d.fh).f};--fb:${fnt(d.fb).f};--r:${d.r}px`};
