@@ -21,6 +21,7 @@ button{font:inherit;color:inherit}
 .b.sm{padding:6px 10px;font-size:14.5px}
 .b.dng{color:var(--danger)}
 .b:disabled{opacity:.4;cursor:default}
+.b.ur{width:46px;padding:0;justify-content:center}.b.ur svg{stroke-width:2.6}.b.ur:disabled{opacity:.55}
 #devSel{width:150px;text-overflow:ellipsis}
 .seg{display:flex;flex:none;border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .seg .b{border:0;border-radius:0}
@@ -987,8 +988,8 @@ function renderBar(){
  <div class="seg"><button class="b${ui.mode==='desktop'?' on':''}" data-act="mode" data-m="desktop" title="Vista de escritorio">${svg('desktop',16)}<span class="lbl">Escritorio</span></button><button class="b${ui.mode==='tablet'?' on':''}" data-act="mode" data-m="tablet" title="Vista de tablet">${svg('tablet',16)}<span class="lbl">Tablet</span></button><button class="b${ui.mode==='mobile'?' on':''}" data-act="mode" data-m="mobile" title="Vista móvil">${svg('mobile',16)}<span class="lbl">Móvil</span></button></div>${true?`<label class="pgsel" title="Tamaño de pantalla"><select id="devSel" aria-label="Dispositivo">${DEVS[ui.mode].map(d=>`<option value="${d[1]}"${d[1]===ui.w?' selected':''}>${d[1]>=9999?d[0]:d[1]+'px · '+d[0]}</option>`).join('')}</select></label>`:''}
  <label class="pgsel" title="Ir a otra página">${svg('pages',18)}<select id="pgSel" aria-label="Página">${S.pages.map(p=>`<option value="${p.id}"${p.id===curPage().id?' selected':''}${p.hidden?' disabled':''}>${esc(p.name)}${p.hidden?' (oculta)':''}</option>`).join('')}</select></label>
  <span class="sp"></span><span class="stat">${st}</span>
- <button class="b" data-act="undo" title="Deshacer (Ctrl+Z)"${hist.length?'':' disabled'}>${svg('undo',16)}</button>
- <button class="b" data-act="redo" title="Rehacer (Ctrl+Y)"${fut.length?'':' disabled'}>${svg('redo',16)}</button>
+ <button class="b ur" data-act="undo" title="Deshacer (Ctrl+Z)"${hist.length?'':' disabled'}>${svg('undo',24)}</button>
+ <button class="b ur" data-act="redo" title="Rehacer (Ctrl+Y)"${fut.length?'':' disabled'}>${svg('redo',24)}</button>
  <button class="b${ui.preview?' on':''}" data-act="preview">${svg('eye',16)}<span class="lbl">${ui.preview?'Seguir editando':'Vista previa'}</span></button>
  <button class="b" data-act="save">${svg('save',16)}<span class="lbl">Guardar</span></button>
  <button class="b pri" data-act="publish">${svg('rocket',16)}<span class="lbl">Publicar</span></button>`;
