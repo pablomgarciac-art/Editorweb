@@ -127,7 +127,7 @@ function openSeo(id){
  $('#modal').innerHTML=`<div class="card seo" role="dialog" aria-label="SEO"><div class="seohd"><h2>SEO y buscadores <span class="sc" id="seoScore"></span></h2>
  <label class="seosel">Página <select id="seoPg">${pg.map(x=>`<option value="${x.id}"${x.id===ui.seoPg?' selected':''}>${esc(x.name)} · ${seoScore(x)}%</option>`).join('')}</select></label></div>
  <div id="seoBody">${seoBody(p)}</div>
- <div class="row" style="margin-top:14px;justify-content:flex-end"><button class="b pri" data-act="seodone" style="flex:none;min-width:160px">Listo</button></div></div>`;
+ <div class="seoft"><button class="b pri" data-act="seodone">Listo</button></div></div>`;
  $('#modal').hidden=false;seoLive()}
 $('#modal').addEventListener('input',ev=>{const t=ev.target;
  if(t.dataset.seo){const p=S.pages.find(x=>x.id===ui.seoPg);if(!p)return;seoP(p)[t.dataset.seo]=t.type==='checkbox'?t.checked:t.value;commit();seoLive()}
