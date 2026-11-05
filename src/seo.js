@@ -77,20 +77,24 @@ function downloadZip(){
 /* ----- Ventana SEO ----- */
 function seoBody(p){
  const q=seoP(p),o=seoOf(p),s=seoS(),sl=pgSlugs(),home=sl[p.id]==='index';
- return `<div class="dg">Cómo se ve en Google</div><div class="gp" id="seoPrev"></div>
+ return `<div class="seocols"><div class="seoc">
  <div class="dg">Esta página</div>
  <div class="f"><label>Título (SEO) <span class="cnt" id="cT"></span></label><input type="text" data-seo="t" value="${esc(q.t)}" placeholder="${esc(o.t)}"></div>
- <div class="f"><label>Descripción <span class="cnt" id="cD"></span></label><textarea data-seo="d" rows="3" placeholder="${esc(o.d)}">${esc(q.d)}</textarea></div>
- ${home?`<p class="hint">La dirección de la página de inicio es siempre <b>index.html</b> (la raíz de tu web).</p>`:`<div class="f"><label>Dirección (URL)</label><input type="text" data-seo="slug" value="${esc(q.slug)}" placeholder="${esc(slugify(p.name))}"><small class="hint">Quedará como <b>${esc(sl[p.id])}.html</b>. Usa palabras clave, sin espacios ni tildes.</small></div>`}
- <div class="f"><label>Imagen al compartir (dirección https://…)</label><input type="text" data-seo="img" value="${esc(q.img)}" placeholder="${esc(s.img||'https://tuweb.com/imagen.jpg')}"></div>
+ <div class="f"><label>Descripción <span class="cnt" id="cD"></span></label><textarea data-seo="d" rows="2" placeholder="${esc(o.d)}">${esc(q.d)}</textarea></div>
+ <div class="row2">${home?`<div class="f"><label>Dirección (URL)</label><input type="text" value="index.html" disabled><small class="hint">Inicio = raíz de tu web</small></div>`:`<div class="f"><label>Dirección (URL)</label><input type="text" data-seo="slug" value="${esc(q.slug)}" placeholder="${esc(slugify(p.name))}"><small class="hint">Quedará como <b>${esc(sl[p.id])}.html</b></small></div>`}
+ <div class="f"><label>Imagen al compartir (https://…)</label><input type="text" data-seo="img" value="${esc(q.img)}" placeholder="${esc(s.img||'https://tuweb.com/imagen.jpg')}"></div></div>
  <label class="ck"><input type="checkbox" data-seo="noidx"${q.noidx?' checked':''}> No mostrar esta página en Google (noindex)</label>
- <div class="dg">Revisión</div><ul class="chk" id="seoChk"></ul>
  <div class="dg">Datos de toda la web</div>
- <div class="f"><label>Dirección de tu web (dominio)</label><input type="text" data-seos="domain" value="${esc(s.domain)}" placeholder="https://www.mitienda.com"><small class="hint">Necesaria para el mapa del sitio (sitemap) y los enlaces canónicos.</small></div>
- <div class="f"><label>Imagen para compartir por defecto</label><input type="text" data-seos="img" value="${esc(s.img)}" placeholder="https://…/portada.jpg"></div>
- <div class="f"><label>Nombre de la empresa</label><input type="text" data-seos="name" value="${esc(s.name)}" placeholder="${esc(S.title)}"></div>
- <div class="row"><div class="f"><label>Teléfono</label><input type="text" data-seos="tel" value="${esc(s.tel)}" placeholder="+34 600 000 000"></div><div class="f"><label>Dirección postal</label><input type="text" data-seos="addr" value="${esc(s.addr)}" placeholder="Calle, nº, ciudad"></div></div>
- <small class="hint">Estos datos se publican como «datos estructurados» de inmobiliaria para que Google muestre tu negocio mejor.</small>`}
+ <div class="row2"><div class="f"><label>Dirección de tu web (dominio)</label><input type="text" data-seos="domain" value="${esc(s.domain)}" placeholder="https://www.mitienda.com"></div>
+ <div class="f"><label>Imagen por defecto al compartir</label><input type="text" data-seos="img" value="${esc(s.img)}" placeholder="https://…/portada.jpg"></div></div>
+ <div class="row3"><div class="f"><label>Empresa</label><input type="text" data-seos="name" value="${esc(s.name)}" placeholder="${esc(S.title)}"></div>
+ <div class="f"><label>Teléfono</label><input type="text" data-seos="tel" value="${esc(s.tel)}" placeholder="+34 600 000 000"></div>
+ <div class="f"><label>Dirección postal</label><input type="text" data-seos="addr" value="${esc(s.addr)}" placeholder="Calle, nº, ciudad"></div></div>
+ </div><div class="seoc">
+ <div class="dg">Así se ve en Google</div><div class="gp" id="seoPrev"></div>
+ <div class="dg">Revisión</div><ul class="chk" id="seoChk"></ul>
+ <small class="hint">El dominio sirve para el mapa del sitio y los enlaces canónicos. Empresa, teléfono y dirección se publican como datos estructurados de inmobiliaria.</small>
+ </div></div>`}
 function seoLive(){
  const p=S.pages.find(x=>x.id===ui.seoPg);if(!p)return;const o=seoOf(p),sl=pgSlugs(),dom=seoDom()||'tudominio.com';
  const cut=(t,n)=>t.length>n?t.slice(0,n-1).trimEnd()+'…':t;
@@ -103,10 +107,10 @@ function openSeo(id){
  const pg=pgList();if(!pg.length)return;
  ui.seoPg=pg.find(x=>x.id===id)?id:(pg.find(x=>x.id===ui.pageId)||pg[0]).id;
  const p=S.pages.find(x=>x.id===ui.seoPg);
- $('#modal').innerHTML=`<div class="card seo" role="dialog" aria-label="SEO"><h2>SEO y buscadores <span class="sc" id="seoScore"></span></h2>
- <div class="f"><label>Página</label><select id="seoPg">${pg.map(x=>`<option value="${x.id}"${x.id===ui.seoPg?' selected':''}>${esc(x.name)} · ${seoScore(x)}%</option>`).join('')}</select></div>
+ $('#modal').innerHTML=`<div class="card seo" role="dialog" aria-label="SEO"><div class="seohd"><h2>SEO y buscadores <span class="sc" id="seoScore"></span></h2>
+ <label class="seosel">Página <select id="seoPg">${pg.map(x=>`<option value="${x.id}"${x.id===ui.seoPg?' selected':''}>${esc(x.name)} · ${seoScore(x)}%</option>`).join('')}</select></label></div>
  <div id="seoBody">${seoBody(p)}</div>
- <div class="row" style="margin-top:12px"><button class="b pri" data-act="seodone">Listo</button></div></div>`;
+ <div class="row" style="margin-top:14px;justify-content:flex-end"><button class="b pri" data-act="seodone" style="flex:none;min-width:160px">Listo</button></div></div>`;
  $('#modal').hidden=false;seoLive()}
 $('#modal').addEventListener('input',ev=>{const t=ev.target;
  if(t.dataset.seo){const p=S.pages.find(x=>x.id===ui.seoPg);if(!p)return;seoP(p)[t.dataset.seo]=t.type==='checkbox'?t.checked:t.value;commit();seoLive()}
