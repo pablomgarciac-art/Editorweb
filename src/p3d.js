@@ -52,17 +52,22 @@ async function copyText(txt,ta){
 
 /* ===== Publicar ===== */
 function openPublish(){
- const html=buildSite(),pgs=S.pages.filter(p=>!p.hidden);
+ pubFiles=buildFiles();const pgs=pgList(),sl=pgSlugs();
  let secs=0,bad=0,rvp=0;
  pgs.forEach(p=>p.sections.filter(s=>!s.hidden).forEach(s=>{secs++;s.els.filter(e=>!e.hid).forEach(e=>{if(e.t==='reviews'&&e.items.some(i=>/Nombre del cliente/.test(i.n)))rvp++;if(linkBad(e,pgs))bad++})}));
+ const weak=pgs.filter(p=>seoScore(p)<100).length,kb=f=>Math.max(1,Math.round(f.data.length/1024))+' KB';
  $('#modal').innerHTML=`<div class="card" role="dialog" aria-label="Publicar"><h2>Publicar tu web</h2>
- <p class="hint">${pgs.length} página${pgs.length===1?'':'s'} · ${secs} secciones · ${Math.round(html.length/1024)} KB. Es un único archivo HTML que funciona en ordenador y móvil.</p>
+ <p class="hint">${pgs.length} página${pgs.length===1?'':'s'} · ${secs} secciones. Se publica una página HTML por cada página, con su propio SEO, más el mapa del sitio y el robots.txt.</p>
  ${rvp?`<p style="color:var(--danger);font-weight:600">Hay opiniones de Google de ejemplo sin sustituir. Cámbialas por las reales antes de publicar.</p>`:''}
  ${bad?`<p style="color:var(--danger);font-weight:600">Hay ${bad} enlace${bad===1?'':'s'} sin destino válido (a una página oculta o vacío). Revísalos antes de publicar.</p>`:''}
- <ol style="padding-left:20px;margin:10px 0"><li>Copia el código.</li><li>Pégalo en un archivo llamado <b>index.html</b>.</li><li>Súbelo a tu hosting, o a Netlify o GitHub Pages.</li></ol>
- <textarea class="code" id="pubCode" readonly rows="9">${esc(html)}</textarea>
- <div class="row" style="margin-top:12px"><button class="b pri" data-act="copyhtml">Copiar código</button><button class="b" data-act="modalclose">Cerrar</button></div>
- <p class="hint">Los mapas, vídeos y el envío de formularios solo funcionan en la web ya publicada, no dentro del editor.</p></div>`;
+ ${seoDom()?'':`<p style="color:var(--danger);font-weight:600">Falta la dirección de tu web (dominio) para el mapa del sitio.</p>`}
+ ${weak?`<p style="font-weight:600">${weak} página${weak===1?' tiene':'s tienen'} mejoras SEO pendientes.</p>`:''}
+ <div class="row" style="margin:6px 0 12px"><button class="b" data-act="seo">${svg('search',16)}Revisar SEO</button></div>
+ <div class="dg">Archivos</div>
+ <div class="pubf">${pubFiles.map((f,k)=>`<div class="li"><div class="lab">${esc(f.name)}<small>${kb(f)}${f.p?' · SEO '+seoScore(f.p)+'%':''}</small></div><button class="b sm" data-act="copyfile" data-i="${k}">Copiar</button></div>`).join('')}</div>
+ <div class="row" style="margin-top:12px"><button class="b pri" data-act="dlzip">${svg('save',16)}Descargar ZIP</button><button class="b" data-act="modalclose">Cerrar</button></div>
+ <ol style="padding-left:20px;margin:12px 0 4px"><li>Descarga el ZIP y descomprímelo.</li><li>Sube todos los archivos a tu hosting, Netlify o GitHub Pages (la página de inicio es <b>index.html</b>).</li><li>En Google Search Console envía tu <b>sitemap.xml</b>.</li></ol>
+ <p class="hint">Si la descarga no funciona aquí, copia cada archivo con «Copiar» y pégalo en un archivo con ese nombre. Los mapas, vídeos y el envío de formularios solo funcionan en la web ya publicada.</p></div>`;
  $('#modal').hidden=false;
 }
 
@@ -76,6 +81,10 @@ function act(a,b){
  case 'preview':ui.preview=!ui.preview;if(ui.preview){ui.elId=null;ui.secId=null}renderAll();break;
  case 'save':save(true);break;
  case 'publish':openPublish();break;
+ case 'seo':openSeo(id||ui.pageId);break;
+ case 'seodone':$('#modal').hidden=true;renderAll();break;
+ case 'dlzip':downloadZip();break;
+ case 'copyfile':{const f=pubFiles[+b.dataset.i];if(f)copyText(f.data);break}
  case 'modalclose':$('#modal').hidden=true;break;
  case 'copyhtml':copyText($('#pubCode').value,$('#pubCode'));break;
  case 'panel':if(ui.drawer&&ui.panel===b.dataset.p)ui.drawer=false;else{ui.panel=b.dataset.p;ui.drawer=true}renderRail();renderDrawer();break;

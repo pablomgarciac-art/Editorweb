@@ -66,7 +66,7 @@ function dPages(){
  <button class="ib" data-act="pgdown" data-id="${p.id}" title="Bajar">${svg('arrdown',19)}</button>
  <button class="ib" data-act="pghide" data-id="${p.id}" title="${p.hidden?'Mostrar':'Ocultar'}">${svg(p.hidden?'eye':'hidden',19)}</button>
  <button class="ib" data-act="pgdup" data-id="${p.id}" title="Duplicar">${svg('copy',19)}</button>
- <button class="ib" data-act="pgdel" data-id="${p.id}" title="Borrar">${svg('trash',19)}</button></div></div>`).join('')+`<button class="b pri" data-act="catpage" style="margin-top:8px">${svg('plus',16)}Añadir página</button>`;
+ <button class="ib" data-act="pgdel" data-id="${p.id}" title="Borrar">${svg('trash',19)}</button></div></div>`).join('')+`<button class="b pri" data-act="catpage" style="margin-top:8px">${svg('plus',16)}Añadir página</button><button class="b seob" data-act="seo" style="margin-top:8px">${svg('search',16)}SEO de las páginas<span class="sc ${scoreCls(Math.round(pgList().reduce((a,p)=>a+seoScore(p),0)/Math.max(1,pgList().length)))}">${Math.round(pgList().reduce((a,p)=>a+seoScore(p),0)/Math.max(1,pgList().length))}%</span></button>`;
 }
 const lockRow=s=>`<div class="li big${ui.secId===s.id?' on':''}${s.hidden?' off':''}">
  <button class="ib" data-act="selsec" data-id="${s.id}" title="Bloqueada: no se puede mover">${svg('lock',21)}</button>
@@ -113,6 +113,7 @@ function dHidden(){
 function dSettings(){
  return hdr('Configuración de la Página Web')+`<div class="f"><label>Nombre del sitio</label><input type="text" data-site="title" value="${esc(S.title)}"></div>
  <div class="f"><label>Descripción (buscadores)</label><textarea data-site="desc">${esc(S.desc)}</textarea></div>
+ <button class="b sm" data-act="seo" style="margin-bottom:10px">${svg('search',14)}SEO por página (títulos, descripciones, URLs)</button>
  <p class="hint">La cabecera y el pie de página se editan en el panel «Secciones» (arriba y abajo, con candado). El logo se usa en ambos.</p><div class="dg">Logo</div>
  <label class="ck"><input type="checkbox" data-logo="on"${S.logo.on!==false?' checked':''}> Mostrar logo en el menú</label>
  <div class="row" style="margin-bottom:10px"><button class="b sm" data-act="up" data-f="logo">${svg('image',14)}Subir mi logo</button><button class="b sm" data-act="rmlogo">Logo predeterminado</button></div>

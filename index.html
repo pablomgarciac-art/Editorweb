@@ -141,6 +141,12 @@ textarea{resize:vertical;min-height:64px}
 .empty{padding:60px 20px;text-align:center;color:#66738a;font:15px 'Nunito Sans',sans-serif}
 #modal{position:fixed;inset:0;z-index:100;background:rgba(8,14,26,.6);display:flex;align-items:center;justify-content:center;padding:16px}
 #modal[hidden]{display:none}
+.card.seo{width:min(720px,96vw);max-height:92vh;overflow:auto}
+.gp{background:#fff;border-radius:10px;padding:12px 16px;font-family:Arial,sans-serif}.gu{color:#4d5156;font-size:13px}.gt{color:#1a0dab;font-size:20px;line-height:1.3;margin:2px 0}.gd{color:#4d5156;font-size:14px;line-height:1.5}
+.cnt{float:right;font-weight:700;font-size:13px}.cnt.g,.sc.g{color:#2fbf71}.cnt.r,.sc.r{color:#ff7a7a}.sc.a{color:#f2b134}
+.sc{font-size:14px;font-weight:800;margin-left:8px}.seob{width:100%;justify-content:center}
+.chk{list-style:none;margin:0 0 6px;padding:0;display:flex;flex-direction:column;gap:6px}.chk li{display:flex;gap:8px;align-items:flex-start;font-size:14.5px;line-height:1.35}.chk li svg{flex:none;margin-top:1px}.chk .ok svg{color:#2fbf71}.chk .no svg{color:#f2b134}
+.pubf .li{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}.pubf .lab{flex:1}.pubf small{display:block;color:var(--mute)}
 .card{width:min(720px,100%);max-height:90vh;overflow:auto;background:var(--panel-2);border-radius:14px;padding:22px;border:1px solid var(--line)}
 .card h2{margin:0 0 6px;font-size:21px}
 .card.cat{width:min(1100px,100%);height:90vh;padding:0;display:flex;flex-direction:column;overflow:hidden}
@@ -775,7 +781,7 @@ const FIT=['icon','btnicon','btntext','btn','btnti','social','social1','shape'];
 const NOLINK=['social','social1','html','form','map','video','reviews'];
 const TXT=['h1','h2','h3','p'];
 
-let mnN=0;
+let mnN=0,exportPg=null,pubFiles=[];
 const col=v=>({c1:'var(--c1)',c2:'var(--c2)',ink:'var(--ink)',bg:'var(--bg)'}[v]||v||'');
 const hexOf=(v,fb='#000000')=>{const m={c1:S.design.c1,c2:S.design.c2,ink:S.design.ink,bg:S.design.bg};let x=v||fb;x=m[x]||x;return /^#[0-9a-f]{6}$/i.test(x)?x:'#000000'};
 const vars=()=>{const d=S.design;return `--c1:${d.c1};--c2:${d.c2};--bg:${d.bg};--ink:${d.ink};--fh:${fnt(d.fh).f};--fb:${fnt(d.fb).f};--r:${d.r}px`};
@@ -823,7 +829,7 @@ function inner(e,ed){
  case 'btntext':return `<div class="bx${HV(e).c}" style="${HV(e).s}${BD(e)}color:${c||'var(--c1)'}"><span class="tx" data-k="text">${tx}</span></div>`;
  case 'btnti':return `<div class="bx${HV(e).c}" style="${HV(e).s}${BD(e)}background:${bg||'var(--c1)'};color:${c||'#fff'};border-radius:${e.r}px">${svg(e.icon,20)}<span class="tx" data-k="text">${tx}</span></div>`;
  case 'logo':{const L=S.logo||{},h=clamp(e.lh||L.h||38,16,120);const m=L.on===false?'':(L.src?`<img src="${esc(L.src)}" alt="Logo" style="height:${h}px;width:auto">`:markSvg(h));const nm=e.name===false?'':`<b style="${c?`color:${c};`:''}${e.nfs?`font-size:${clamp(+e.nfs,10,60)}px;`:''}${FF(e)}${e.nb===false?'font-weight:400;':''}">${esc(e.nm||S.title)}</b>`;const pg0=(S.pages.find(p=>!p.hidden)||S.pages[0]).id;return ed?`<div class="brand">${m}${nm}</div>`:`<a class="brand" href="#p-${pg0}" data-p="${pg0}">${m}${nm}</a>`}
- case 'menu':{const pgs=S.pages.filter(p=>!p.hidden),cur=ed?curPage().id:pgs[0].id;return `<nav data-al="${e.align||'right'}" class="mn mn-${e.style||'pill'}${e.dir==='col'?' mn-col':''}" style="justify-content:${e.align==='left'?'flex-start':e.align==='center'?'center':'flex-end'};${e.dir==='col'&&e.align!=='left'?`align-items:${e.align==='center'?'center':'flex-end'};`:''}${c?`--mc:${c};`:''}${e.hc?`--mh:${col(e.hc)};`:''}--mfs:${clamp(+e.fs||15,10,40)}px;--mal:${e.align==='center'?'center':e.align==='left'?'flex-start':'flex-end'};">${(()=>{const k='mt'+(++mnN);return `<input type="checkbox" id="${k}" class="mnc" aria-hidden="true"><label for="${k}" class="mnb" aria-label="Abrir menú"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></label><div class="mnl">`})()}${pgs.map(p=>`<a href="#p-${p.id}" data-p="${p.id}"${p.id===cur?' class="on"':''}>${esc(p.name)}</a>`).join('')}</div></nav>`}
+ case 'menu':{const pgs=S.pages.filter(p=>!p.hidden),cur=ed?curPage().id:(exportPg||pgs[0].id);return `<nav data-al="${e.align||'right'}" class="mn mn-${e.style||'pill'}${e.dir==='col'?' mn-col':''}" style="justify-content:${e.align==='left'?'flex-start':e.align==='center'?'center':'flex-end'};${e.dir==='col'&&e.align!=='left'?`align-items:${e.align==='center'?'center':'flex-end'};`:''}${c?`--mc:${c};`:''}${e.hc?`--mh:${col(e.hc)};`:''}--mfs:${clamp(+e.fs||15,10,40)}px;--mal:${e.align==='center'?'center':e.align==='left'?'flex-start':'flex-end'};">${(()=>{const k='mt'+(++mnN);return `<input type="checkbox" id="${k}" class="mnc" aria-hidden="true"><label for="${k}" class="mnb" aria-label="Abrir menú"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></label><div class="mnl">`})()}${pgs.map(p=>`<a href="#p-${p.id}" data-p="${p.id}"${p.id===cur?' class="on"':''}>${esc(p.name)}</a>`).join('')}</div></nav>`}
  case 'social':case 'social1':{
   const single=e.t==='social1',z=single?clamp(e.h,28,90):clamp(e.sz||44,28,80);
   const list=single?[e.nets[0]||{n:'instagram',u:''}]:e.nets;
@@ -1006,7 +1012,7 @@ function dPages(){
  <button class="ib" data-act="pgdown" data-id="${p.id}" title="Bajar">${svg('arrdown',19)}</button>
  <button class="ib" data-act="pghide" data-id="${p.id}" title="${p.hidden?'Mostrar':'Ocultar'}">${svg(p.hidden?'eye':'hidden',19)}</button>
  <button class="ib" data-act="pgdup" data-id="${p.id}" title="Duplicar">${svg('copy',19)}</button>
- <button class="ib" data-act="pgdel" data-id="${p.id}" title="Borrar">${svg('trash',19)}</button></div></div>`).join('')+`<button class="b pri" data-act="catpage" style="margin-top:8px">${svg('plus',16)}Añadir página</button>`;
+ <button class="ib" data-act="pgdel" data-id="${p.id}" title="Borrar">${svg('trash',19)}</button></div></div>`).join('')+`<button class="b pri" data-act="catpage" style="margin-top:8px">${svg('plus',16)}Añadir página</button><button class="b seob" data-act="seo" style="margin-top:8px">${svg('search',16)}SEO de las páginas<span class="sc ${scoreCls(Math.round(pgList().reduce((a,p)=>a+seoScore(p),0)/Math.max(1,pgList().length)))}">${Math.round(pgList().reduce((a,p)=>a+seoScore(p),0)/Math.max(1,pgList().length))}%</span></button>`;
 }
 const lockRow=s=>`<div class="li big${ui.secId===s.id?' on':''}${s.hidden?' off':''}">
  <button class="ib" data-act="selsec" data-id="${s.id}" title="Bloqueada: no se puede mover">${svg('lock',21)}</button>
@@ -1053,6 +1059,7 @@ function dHidden(){
 function dSettings(){
  return hdr('Configuración de la Página Web')+`<div class="f"><label>Nombre del sitio</label><input type="text" data-site="title" value="${esc(S.title)}"></div>
  <div class="f"><label>Descripción (buscadores)</label><textarea data-site="desc">${esc(S.desc)}</textarea></div>
+ <button class="b sm" data-act="seo" style="margin-bottom:10px">${svg('search',14)}SEO por página (títulos, descripciones, URLs)</button>
  <p class="hint">La cabecera y el pie de página se editan en el panel «Secciones» (arriba y abajo, con candado). El logo se usa en ambos.</p><div class="dg">Logo</div>
  <label class="ck"><input type="checkbox" data-logo="on"${S.logo.on!==false?' checked':''}> Mostrar logo en el menú</label>
  <div class="row" style="margin-bottom:10px"><button class="b sm" data-act="up" data-f="logo">${svg('image',14)}Subir mi logo</button><button class="b sm" data-act="rmlogo">Logo predeterminado</button></div>
@@ -1155,6 +1162,120 @@ function renderCanvas(){
 }
 function loadFonts(){const u=gfUrl(FONTS.map(f=>f.id));if(u&&!$('#gf')){const l=document.createElement('link');l.id='gf';l.rel='stylesheet';l.href=u;document.head.appendChild(l)}}
 function renderAll(){renderBar();renderRail();renderDrawer();renderCanvas();renderProps()}
+/* ===== SEO por página + publicación en ZIP ===== */
+const seoS=()=>(S.seo=S.seo||{domain:'',img:'',type:'RealEstateAgent',name:'',tel:'',addr:''});
+const seoP=p=>(p.seo=p.seo||{t:'',d:'',slug:'',img:'',noidx:false});
+const slugify=t=>(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'pagina';
+const pgList=()=>S.pages.filter(p=>!p.hidden);
+function pgSlugs(){const used={},out={};pgList().forEach((p,i)=>{let s=i===0?'index':slugify(seoP(p).slug||p.name);if(i&&s==='index')s='inicio';const b=s;let n=2;while(used[s])s=b+'-'+n++;used[s]=1;out[p.id]=s});return out}
+const seoDom=()=>{let d=(seoS().domain||'').trim().replace(/\/+$/,'');if(d&&!/^https?:\/\//i.test(d))d='https://'+d;return d};
+function seoOf(p){const i=pgList().findIndex(x=>x.id===p.id),q=seoP(p);
+ return{t:(q.t||'').trim()||(i<=0?S.title:p.name+' | '+S.title),d:(q.d||'').trim()||S.desc||'',img:(q.img||'').trim()||(seoS().img||'').trim(),noidx:!!q.noidx,custom:!!(q.t||'').trim()}}
+function seoChecks(p){const o=seoOf(p),L=[];
+ const h1=p.sections.filter(s=>!s.hidden).reduce((n,s)=>n+s.els.filter(e=>!e.hid&&e.t==='h1').length,0);
+ L.push(o.t.length>=25&&o.t.length<=60?{ok:1,m:`Título con buena longitud (${o.t.length} caracteres)`}:{ok:0,m:o.t.length<25?`Título corto (${o.t.length}). Lo ideal son 25–60 caracteres, con la palabra clave (ej. «Pisos en venta en Madrid»)`:`Título largo (${o.t.length}). Google lo cortará; máximo 60`});
+ L.push(o.d.length>=70&&o.d.length<=160?{ok:1,m:`Descripción con buena longitud (${o.d.length})`}:{ok:0,m:o.d.length<70?`Descripción corta (${o.d.length}). Lo ideal son 70–160 caracteres`:`Descripción larga (${o.d.length}). Google la cortará; máximo 160`});
+ L.push(h1===1?{ok:1,m:'Tiene un único título principal (Título 1)'}:{ok:0,m:h1===0?'Falta un «Título 1» en la página. Google lo usa como tema principal':`Hay ${h1} elementos «Título 1». Deja solo uno por página`});
+ L.push(o.img?{ok:1,m:'Tiene imagen para compartir en redes'}:{ok:0,m:'Sin imagen para compartir en WhatsApp y redes (pon una dirección de imagen)'});
+ return L}
+const seoScore=p=>{const L=seoChecks(p);return Math.round(L.filter(x=>x.ok).length/L.length*100)};
+const scoreCls=n=>n>=100?'g':n>=50?'a':'r';
+
+/* ----- HTML de cada página ----- */
+function buildPageHTML(p){
+ const sl=pgSlugs(),pgs=pgList(),me=sl[p.id],home=me==='index',o=seoOf(p),dom=seoDom(),sx=seoS();
+ exportPg=p.id;
+ const nav=S.header&&!S.header.hidden?secHTML(S.header,0,false):'',foot=S.footer&&!S.footer.hidden?secHTML(S.footer,0,false):'';
+ let all=nav+`<main class="page on" id="p-${p.id}">${p.sections.filter(s=>!s.hidden).map(s=>secHTML(s,0,false)).join('')}</main>`+foot;
+ exportPg=null;
+ const secPg={};pgs.forEach(q=>q.sections.forEach(s=>{secPg[s.id]=q.id}));
+ all=all.replace(/href="#p-([^"]+)"/g,(m,id)=>sl[id]?`href="${sl[id]==='index'?'index.html':sl[id]+'.html'}"`:m).replace(/href="#s-([^"]+)"/g,(m,id)=>{const q=secPg[id];return q&&q!==p.id?`href="${sl[q]}.html#s-${id}"`:m});
+ const css=`*{box-sizing:border-box}body{margin:0}.site{min-height:100vh}.site .sec{overflow:hidden}.page{display:none}.page.on{display:block}`+SITE_CSS+HFCSS+`@media(max-width:900px){${mobRules('.site')}}@media(min-width:721px) and (max-width:900px){${tabRules('.site')}}`;
+ const canon=dom?dom+(home?'/':'/'+me+'.html'):'';
+ const ids=[S.design.fh,S.design.fb];[S.header,S.footer,...S.pages.flatMap(q=>q.sections)].forEach(s=>s&&s.els.forEach(e=>{if(e.ff)ids.push(e.ff)}));const fu=gfUrl(ids);
+ const m=(k,v,a)=>v?`<meta ${a||'name'}="${k}" content="${esc(v)}">\n`:'';
+ const imgAbs=o.img&&!/^https?:/i.test(o.img)&&dom?dom+'/'+o.img.replace(/^\//,''):o.img;
+ const ld={"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":S.title,...(dom?{"url":dom+'/'}:{})},home||sx.name?{"@type":sx.type||"RealEstateAgent","name":sx.name||S.title,...(dom?{"url":dom+'/'}:{}),...(sx.tel?{"telephone":sx.tel}:{}),...(sx.addr?{"address":{"@type":"PostalAddress","streetAddress":sx.addr}}:{}),...(imgAbs?{"image":imgAbs}:{})}:{"@type":"WebPage","name":o.t,"description":o.d,...(canon?{"url":canon}:{})}]};
+ return `<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(o.t)}</title>
+${m('description',o.d)}${m('robots',o.noidx?'noindex,follow':'index,follow')}${canon?`<link rel="canonical" href="${esc(canon)}">\n`:''}${m('og:type','website','property')}${m('og:locale','es_ES','property')}${m('og:site_name',S.title,'property')}${m('og:title',o.t,'property')}${m('og:description',o.d,'property')}${m('og:url',canon,'property')}${m('og:image',imgAbs,'property')}${m('twitter:card',imgAbs?'summary_large_image':'summary')}${m('twitter:title',o.t)}${m('twitter:description',o.d)}${m('twitter:image',imgAbs)}${fu?`<link rel="stylesheet" href="${fu}">\n`:''}<script type="application/ld+json">${JSON.stringify(ld).replace(/</g,'\\u003c')}<\/script>
+<style>${css}</style>
+</head>
+<body>
+<div class="site" style="${vars()}">
+${all}
+</div>
+<script>(${siteBoot.toString()})();<\/script>
+</body>
+</html>`;
+}
+function buildFiles(){
+ const sl=pgSlugs(),dom=seoDom(),F=[];
+ pgList().forEach(p=>F.push({name:sl[p.id]+'.html',data:buildPageHTML(p),p}));
+ const base=dom||'https://tudominio.com',today=new Date().toISOString().slice(0,10);
+ F.push({name:'sitemap.xml',data:`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`+pgList().filter(p=>!seoOf(p).noidx).map(p=>`  <url><loc>${esc(base+(sl[p.id]==='index'?'/':'/'+sl[p.id]+'.html'))}</loc><lastmod>${today}</lastmod></url>`).join('\n')+`\n</urlset>\n`});
+ F.push({name:'robots.txt',data:`User-agent: *\nAllow: /\n\nSitemap: ${base}/sitemap.xml\n`});
+ return F}
+
+/* ----- ZIP (sin compresión) ----- */
+function crc32(u){let t=crc32.t;if(!t){t=crc32.t=[];for(let n=0,c;n<256;n++){c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}}let r=-1;for(let i=0;i<u.length;i++)r=t[(r^u[i])&255]^(r>>>8);return(r^-1)>>>0}
+function makeZip(files){
+ const enc=new TextEncoder(),parts=[],cen=[];let off=0;
+ files.forEach(f=>{const nm=enc.encode(f.name),d=enc.encode(f.data),crc=crc32(d);
+  const lh=new DataView(new ArrayBuffer(30));lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(12,0x21,true);lh.setUint32(14,crc,true);lh.setUint32(18,d.length,true);lh.setUint32(22,d.length,true);lh.setUint16(26,nm.length,true);
+  parts.push(new Uint8Array(lh.buffer),nm,d);
+  const ch=new DataView(new ArrayBuffer(46));ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(14,0x21,true);ch.setUint32(16,crc,true);ch.setUint32(20,d.length,true);ch.setUint32(24,d.length,true);ch.setUint16(28,nm.length,true);ch.setUint32(42,off,true);
+  cen.push(new Uint8Array(ch.buffer),nm);off+=30+nm.length+d.length});
+ const cl=cen.reduce((a,b)=>a+b.length,0),e=new DataView(new ArrayBuffer(22));
+ e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cl,true);e.setUint32(16,off,true);
+ return new Blob([...parts,...cen,new Uint8Array(e.buffer)],{type:'application/zip'})}
+function downloadZip(){
+ const F=pubFiles&&pubFiles.length?pubFiles:buildFiles(),b=makeZip(F),a=document.createElement('a');
+ a.href=URL.createObjectURL(b);a.download=(slugify(S.title)||'web')+'.zip';document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('Descargando el ZIP. Si no baja, usa «Copiar» en cada archivo')}
+
+/* ----- Ventana SEO ----- */
+function seoBody(p){
+ const q=seoP(p),o=seoOf(p),s=seoS(),sl=pgSlugs(),home=sl[p.id]==='index';
+ return `<div class="dg">Cómo se ve en Google</div><div class="gp" id="seoPrev"></div>
+ <div class="dg">Esta página</div>
+ <div class="f"><label>Título (SEO) <span class="cnt" id="cT"></span></label><input type="text" data-seo="t" value="${esc(q.t)}" placeholder="${esc(o.t)}"></div>
+ <div class="f"><label>Descripción <span class="cnt" id="cD"></span></label><textarea data-seo="d" rows="3" placeholder="${esc(o.d)}">${esc(q.d)}</textarea></div>
+ ${home?`<p class="hint">La dirección de la página de inicio es siempre <b>index.html</b> (la raíz de tu web).</p>`:`<div class="f"><label>Dirección (URL)</label><input type="text" data-seo="slug" value="${esc(q.slug)}" placeholder="${esc(slugify(p.name))}"><small class="hint">Quedará como <b>${esc(sl[p.id])}.html</b>. Usa palabras clave, sin espacios ni tildes.</small></div>`}
+ <div class="f"><label>Imagen al compartir (dirección https://…)</label><input type="text" data-seo="img" value="${esc(q.img)}" placeholder="${esc(s.img||'https://tuweb.com/imagen.jpg')}"></div>
+ <label class="ck"><input type="checkbox" data-seo="noidx"${q.noidx?' checked':''}> No mostrar esta página en Google (noindex)</label>
+ <div class="dg">Revisión</div><ul class="chk" id="seoChk"></ul>
+ <div class="dg">Datos de toda la web</div>
+ <div class="f"><label>Dirección de tu web (dominio)</label><input type="text" data-seos="domain" value="${esc(s.domain)}" placeholder="https://www.mitienda.com"><small class="hint">Necesaria para el mapa del sitio (sitemap) y los enlaces canónicos.</small></div>
+ <div class="f"><label>Imagen para compartir por defecto</label><input type="text" data-seos="img" value="${esc(s.img)}" placeholder="https://…/portada.jpg"></div>
+ <div class="f"><label>Nombre de la empresa</label><input type="text" data-seos="name" value="${esc(s.name)}" placeholder="${esc(S.title)}"></div>
+ <div class="row"><div class="f"><label>Teléfono</label><input type="text" data-seos="tel" value="${esc(s.tel)}" placeholder="+34 600 000 000"></div><div class="f"><label>Dirección postal</label><input type="text" data-seos="addr" value="${esc(s.addr)}" placeholder="Calle, nº, ciudad"></div></div>
+ <small class="hint">Estos datos se publican como «datos estructurados» de inmobiliaria para que Google muestre tu negocio mejor.</small>`}
+function seoLive(){
+ const p=S.pages.find(x=>x.id===ui.seoPg);if(!p)return;const o=seoOf(p),sl=pgSlugs(),dom=seoDom()||'tudominio.com';
+ const cut=(t,n)=>t.length>n?t.slice(0,n-1).trimEnd()+'…':t;
+ const g=$('#seoPrev');if(g)g.innerHTML=`<div class="gu">${esc(dom.replace(/^https?:\/\//,''))} › ${esc(sl[p.id]==='index'?'':sl[p.id])}</div><div class="gt">${esc(cut(o.t,60))}</div><div class="gd">${esc(cut(o.d||'Sin descripción',160))}</div>`;
+ const set=(id,n,lo,hi)=>{const e=$(id);if(e){e.textContent=n+' / '+hi;e.className='cnt '+(n>=lo&&n<=hi?'g':'r')}};
+ set('#cT',o.t.length,25,60);set('#cD',o.d.length,70,160);
+ const c=$('#seoChk');if(c)c.innerHTML=seoChecks(p).map(x=>`<li class="${x.ok?'ok':'no'}">${svg(x.ok?'check':'close',16)}<span>${esc(x.m)}</span></li>`).join('');
+ const sc=$('#seoScore');if(sc){const n=seoScore(p);sc.textContent=n+'%';sc.className='sc '+scoreCls(n)}}
+function openSeo(id){
+ const pg=pgList();if(!pg.length)return;
+ ui.seoPg=pg.find(x=>x.id===id)?id:(pg.find(x=>x.id===ui.pageId)||pg[0]).id;
+ const p=S.pages.find(x=>x.id===ui.seoPg);
+ $('#modal').innerHTML=`<div class="card seo" role="dialog" aria-label="SEO"><h2>SEO y buscadores <span class="sc" id="seoScore"></span></h2>
+ <div class="f"><label>Página</label><select id="seoPg">${pg.map(x=>`<option value="${x.id}"${x.id===ui.seoPg?' selected':''}>${esc(x.name)} · ${seoScore(x)}%</option>`).join('')}</select></div>
+ <div id="seoBody">${seoBody(p)}</div>
+ <div class="row" style="margin-top:12px"><button class="b pri" data-act="seodone">Listo</button></div></div>`;
+ $('#modal').hidden=false;seoLive()}
+$('#modal').addEventListener('input',ev=>{const t=ev.target;
+ if(t.dataset.seo){const p=S.pages.find(x=>x.id===ui.seoPg);if(!p)return;seoP(p)[t.dataset.seo]=t.type==='checkbox'?t.checked:t.value;commit();seoLive()}
+ else if(t.dataset.seos){seoS()[t.dataset.seos]=t.value;commit();seoLive()}});
+$('#modal').addEventListener('change',ev=>{if(ev.target.id==='seoPg'){ui.seoPg=ev.target.value;const p=S.pages.find(x=>x.id===ui.seoPg);$('#seoBody').innerHTML=seoBody(p);seoLive()}});
 /* ===== Utilidades de edición ===== */
 const setPath=(o,p,v)=>{const k=p.split('.');let t=o;for(let i=0;i<k.length-1;i++)t=t[k[i]]=t[k[i]]||{};t[k[k.length-1]]=v};
 const swap=(a,i,d)=>{const j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]]};
@@ -1209,17 +1330,22 @@ async function copyText(txt,ta){
 
 /* ===== Publicar ===== */
 function openPublish(){
- const html=buildSite(),pgs=S.pages.filter(p=>!p.hidden);
+ pubFiles=buildFiles();const pgs=pgList(),sl=pgSlugs();
  let secs=0,bad=0,rvp=0;
  pgs.forEach(p=>p.sections.filter(s=>!s.hidden).forEach(s=>{secs++;s.els.filter(e=>!e.hid).forEach(e=>{if(e.t==='reviews'&&e.items.some(i=>/Nombre del cliente/.test(i.n)))rvp++;if(linkBad(e,pgs))bad++})}));
+ const weak=pgs.filter(p=>seoScore(p)<100).length,kb=f=>Math.max(1,Math.round(f.data.length/1024))+' KB';
  $('#modal').innerHTML=`<div class="card" role="dialog" aria-label="Publicar"><h2>Publicar tu web</h2>
- <p class="hint">${pgs.length} página${pgs.length===1?'':'s'} · ${secs} secciones · ${Math.round(html.length/1024)} KB. Es un único archivo HTML que funciona en ordenador y móvil.</p>
+ <p class="hint">${pgs.length} página${pgs.length===1?'':'s'} · ${secs} secciones. Se publica una página HTML por cada página, con su propio SEO, más el mapa del sitio y el robots.txt.</p>
  ${rvp?`<p style="color:var(--danger);font-weight:600">Hay opiniones de Google de ejemplo sin sustituir. Cámbialas por las reales antes de publicar.</p>`:''}
  ${bad?`<p style="color:var(--danger);font-weight:600">Hay ${bad} enlace${bad===1?'':'s'} sin destino válido (a una página oculta o vacío). Revísalos antes de publicar.</p>`:''}
- <ol style="padding-left:20px;margin:10px 0"><li>Copia el código.</li><li>Pégalo en un archivo llamado <b>index.html</b>.</li><li>Súbelo a tu hosting, o a Netlify o GitHub Pages.</li></ol>
- <textarea class="code" id="pubCode" readonly rows="9">${esc(html)}</textarea>
- <div class="row" style="margin-top:12px"><button class="b pri" data-act="copyhtml">Copiar código</button><button class="b" data-act="modalclose">Cerrar</button></div>
- <p class="hint">Los mapas, vídeos y el envío de formularios solo funcionan en la web ya publicada, no dentro del editor.</p></div>`;
+ ${seoDom()?'':`<p style="color:var(--danger);font-weight:600">Falta la dirección de tu web (dominio) para el mapa del sitio.</p>`}
+ ${weak?`<p style="font-weight:600">${weak} página${weak===1?' tiene':'s tienen'} mejoras SEO pendientes.</p>`:''}
+ <div class="row" style="margin:6px 0 12px"><button class="b" data-act="seo">${svg('search',16)}Revisar SEO</button></div>
+ <div class="dg">Archivos</div>
+ <div class="pubf">${pubFiles.map((f,k)=>`<div class="li"><div class="lab">${esc(f.name)}<small>${kb(f)}${f.p?' · SEO '+seoScore(f.p)+'%':''}</small></div><button class="b sm" data-act="copyfile" data-i="${k}">Copiar</button></div>`).join('')}</div>
+ <div class="row" style="margin-top:12px"><button class="b pri" data-act="dlzip">${svg('save',16)}Descargar ZIP</button><button class="b" data-act="modalclose">Cerrar</button></div>
+ <ol style="padding-left:20px;margin:12px 0 4px"><li>Descarga el ZIP y descomprímelo.</li><li>Sube todos los archivos a tu hosting, Netlify o GitHub Pages (la página de inicio es <b>index.html</b>).</li><li>En Google Search Console envía tu <b>sitemap.xml</b>.</li></ol>
+ <p class="hint">Si la descarga no funciona aquí, copia cada archivo con «Copiar» y pégalo en un archivo con ese nombre. Los mapas, vídeos y el envío de formularios solo funcionan en la web ya publicada.</p></div>`;
  $('#modal').hidden=false;
 }
 
@@ -1233,6 +1359,10 @@ function act(a,b){
  case 'preview':ui.preview=!ui.preview;if(ui.preview){ui.elId=null;ui.secId=null}renderAll();break;
  case 'save':save(true);break;
  case 'publish':openPublish();break;
+ case 'seo':openSeo(id||ui.pageId);break;
+ case 'seodone':$('#modal').hidden=true;renderAll();break;
+ case 'dlzip':downloadZip();break;
+ case 'copyfile':{const f=pubFiles[+b.dataset.i];if(f)copyText(f.data);break}
  case 'modalclose':$('#modal').hidden=true;break;
  case 'copyhtml':copyText($('#pubCode').value,$('#pubCode'));break;
  case 'panel':if(ui.drawer&&ui.panel===b.dataset.p)ui.drawer=false;else{ui.panel=b.dataset.p;ui.drawer=true}renderRail();renderDrawer();break;
