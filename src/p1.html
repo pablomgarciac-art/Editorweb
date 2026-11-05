@@ -2,14 +2,14 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Poppins:wght@400;600;700&family=Playfair+Display:wght@600;700&family=Lora:wght@400;600&family=DM+Sans:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap">
 <style>
 /* Concepto: barra superior, raíl azul pizarra, cajón de herramientas, lienzo con secciones punteadas y panel de propiedades */
-:root{--rail:#66769a;--rail-ink:#eef2f9;--accent:#1db4e8;--bg:#e3e8ef;--panel:#f5f7fa;--panel-2:#ffffff;--line:#d3dae5;--ink:#2b3445;--mute:#66738a;--danger:#d64550;--dash:#2f7fc1;--inbg:#ffffff;--inbd:#9db2c3;--hd:#0b6f9c;--hdl:#0b6f9c;--hdbg:#e4f3fa;color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--rail:#525a68;--rail-ink:#eceff5;--bg:#2b2f36;--panel:#4c5461;--panel-2:#5a6371;--line:#707a8a;--ink:#eceff4;--mute:#a9b0bc;--dash:#5fb0f0;--inbg:#1f2328;--inbd:#7d8797;--hd:#1d6f94;--hdl:#7fd0f5;--hdbg:#41596b;color-scheme:dark}}
-:root[data-theme="dark"]{--inbg:#1f2328;--inbd:#7d8797;--hd:#1d6f94;--hdl:#7fd0f5;--hdbg:#41596b;--rail:#525a68;--rail-ink:#eceff5;--bg:#2b2f36;--panel:#4c5461;--panel-2:#5a6371;--line:#707a8a;--ink:#eceff4;--mute:#a9b0bc;--dash:#5fb0f0;color-scheme:dark}
+:root{--rail:#66769a;--rail-ink:#ffffff;--accent:#1db4e8;--bg:#e3e8ef;--panel:#f5f7fa;--panel-2:#ffffff;--line:#d3dae5;--ink:#2b3445;--mute:#66738a;--danger:#d64550;--dash:#2f7fc1;--inbg:#ffffff;--inbd:#9db2c3;--hd:#0b6f9c;--hdl:#0b6f9c;--hdbg:#e4f3fa;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--rail:#525a68;--rail-ink:#ffffff;--bg:#2b2f36;--panel:#4c5461;--panel-2:#5a6371;--line:#707a8a;--ink:#ffffff;--mute:#e3e8f0;--dash:#5fb0f0;--inbg:#1f2328;--inbd:#7d8797;--hd:#1d6f94;--hdl:#7fd0f5;--hdbg:#41596b;color-scheme:dark}}
+:root[data-theme="dark"]{--inbg:#1f2328;--inbd:#7d8797;--hd:#1d6f94;--hdl:#7fd0f5;--hdbg:#41596b;--rail:#525a68;--rail-ink:#ffffff;--bg:#2b2f36;--panel:#4c5461;--panel-2:#5a6371;--line:#707a8a;--ink:#ffffff;--mute:#e3e8f0;--dash:#5fb0f0;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.4 'Nunito Sans',system-ui,sans-serif;overflow:hidden}
 button{font:inherit;color:inherit}
-#app{height:100%;display:grid;grid-template-rows:52px minmax(0,1fr);grid-template-columns:108px auto minmax(0,1fr) auto;grid-template-areas:"bar bar bar bar" "rail drawer stage props"}
+#app{height:100%;display:grid;grid-template-rows:52px minmax(0,1fr);grid-template-columns:120px auto minmax(0,1fr) auto;grid-template-areas:"bar bar bar bar" "rail drawer stage props"}
 #bar{grid-area:bar;display:flex;align-items:center;gap:8px;padding:0 12px;background:var(--panel-2);border-bottom:1px solid var(--line);min-width:0;overflow-x:auto}
 #bar .sp{flex:1}
 .brand{font-weight:700;font-size:16px;white-space:nowrap;display:flex;align-items:center;gap:8px}
