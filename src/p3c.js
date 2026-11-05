@@ -192,11 +192,13 @@ function secProps(f){
 }
 const LKN={none:'Sin enlace',page:'Una de nuestras páginas',section:'Ir a una sección',url:'Web externa',mail:'Correo electrónico',tel:'Teléfono',doc:'Documento'};
 function linkSummary(e){const l=e.link||{k:'none'};if(l.k==='none'||!l.v)return 'Añadir un enlace…';let d=l.v;if(l.k==='page'){const p=S.pages.find(q=>q.id===l.v);d=p?p.name:'(página no encontrada)'}else if(l.k==='section'){let n='(sección no encontrada)';S.pages.forEach(p=>p.sections.forEach(s=>{if(s.id===l.v)n=p.name+' · '+s.name}));d=n}else if(l.k==='doc'&&String(l.v).startsWith('data:'))d=l.name||'documento subido';return LKN[l.k]+': '+esc(String(d).slice(0,40))}
+function multiProps(){const n=ui.multi.length;return hdr(n+' elementos seleccionados')+`<p class="hint">Arrastra uno de ellos para moverlos todos juntos. Con las flechas del teclado los mueves poco a poco (con Mayús, más rápido).</p><div class="row"><button class="b sm" data-act="mdup">${svg('copy',16)}Duplicar</button><button class="b sm" data-act="mdel">${svg('trash',16)}Borrar</button></div><div class="row" style="margin-top:8px"><button class="b sm" data-act="mclear">Quitar selección</button></div>`}
 function renderProps(){
- const f=ui.elId&&findEl(ui.elId),g=!f&&ui.secId&&findSec(ui.secId);
- const open=!!(f||g)&&!ui.preview;
+ const multi=ui.multi.length>1&&!ui.preview;
+ const f=!multi&&ui.elId&&findEl(ui.elId),g=!multi&&!f&&ui.secId&&findSec(ui.secId);
+ const open=(multi||!!(f||g))&&!ui.preview;
  $('#app').classList.toggle('pw',open);
- $('#props').innerHTML=open?`<div class="pin">${f?elProps(f):secProps(g)}</div>`:'';
+ $('#props').innerHTML=open?`<div class="pin">${multi?multiProps():f?elProps(f):secProps(g)}</div>`:'';
 }
 function floatLayers(pg){
  const all=[S.header,...pg.sections.filter(s=>!s.hidden),S.footer].filter(s=>s&&!s.hidden).flatMap(s=>s.els).filter(e=>e.float&&!e.hid);
@@ -205,6 +207,7 @@ function floatLayers(pg){
  return (top.length?`<div class="fl-layer fl-t">${top.map(e=>elHTML(e,true)).join('')}</div>`:'')+(bot.length?`<div class="fl-layer fl-b">${bot.map(e=>elHTML(e,true)).join('')}</div>`:'');
 }
 function renderCanvas(){
+ ui.multi=ui.multi.filter(id=>findEl(id));
  const pg=curPage(),fr=$('#frame');
  const mob=isStack(),tb=mob&&ui.w>720;
  fr.className=(mob?'m':'')+(tb?' tb':'')+(ui.preview?' pv':'');fr.style.maxWidth=ui.w>=9999?'none':ui.w+'px';
