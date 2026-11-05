@@ -29,7 +29,7 @@ function loadProject(p){S=p;S.logo=S.logo||{on:true,src:'',h:38,name:true};const
 function renderBar(){
  const st=dirtyFlag?'Sin guardar':savedAt?'Guardado '+savedAt.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}):'';
  $('#bar').innerHTML=`<span class="brand"><i></i>Editor web</span>
- <div class="seg"><button class="b${ui.mode==='desktop'?' on':''}" data-act="mode" data-m="desktop" title="Vista de escritorio">${svg('desktop',16)}<span class="lbl">Escritorio</span></button><button class="b${ui.mode==='tablet'?' on':''}" data-act="mode" data-m="tablet" title="Vista de tablet">${svg('tablet',16)}<span class="lbl">Tablet</span></button><button class="b${ui.mode==='mobile'?' on':''}" data-act="mode" data-m="mobile" title="Vista móvil">${svg('mobile',16)}<span class="lbl">Móvil</span></button></div>${ui.mode!=='desktop'?`<label class="pgsel" title="Tamaño de pantalla"><select id="devSel" aria-label="Dispositivo">${DEVS[ui.mode].map(d=>`<option value="${d[1]}"${d[1]===ui.w?' selected':''}>${d[1]}px · ${d[0]}</option>`).join('')}</select></label>`:''}
+ <div class="seg"><button class="b${ui.mode==='desktop'?' on':''}" data-act="mode" data-m="desktop" title="Vista de escritorio">${svg('desktop',16)}<span class="lbl">Escritorio</span></button><button class="b${ui.mode==='tablet'?' on':''}" data-act="mode" data-m="tablet" title="Vista de tablet">${svg('tablet',16)}<span class="lbl">Tablet</span></button><button class="b${ui.mode==='mobile'?' on':''}" data-act="mode" data-m="mobile" title="Vista móvil">${svg('mobile',16)}<span class="lbl">Móvil</span></button></div>${true?`<label class="pgsel" title="Tamaño de pantalla"><select id="devSel" aria-label="Dispositivo">${DEVS[ui.mode].map(d=>`<option value="${d[1]}"${d[1]===ui.w?' selected':''}>${d[1]>=9999?d[0]:d[1]+'px · '+d[0]}</option>`).join('')}</select></label>`:''}
  <label class="pgsel" title="Ir a otra página">${svg('pages',18)}<select id="pgSel" aria-label="Página">${S.pages.map(p=>`<option value="${p.id}"${p.id===curPage().id?' selected':''}${p.hidden?' disabled':''}>${esc(p.name)}${p.hidden?' (oculta)':''}</option>`).join('')}</select></label>
  <span class="sp"></span><span class="stat">${st}</span>
  <button class="b" data-act="undo" title="Deshacer (Ctrl+Z)"${hist.length?'':' disabled'}>${svg('undo',16)}</button>
@@ -206,7 +206,7 @@ function floatLayers(pg){
 function renderCanvas(){
  const pg=curPage(),fr=$('#frame');
  const mob=isStack(),tb=mob&&ui.w>720;
- fr.className=(mob?'m':'')+(tb?' tb':'')+(ui.preview?' pv':'');fr.style.maxWidth=ui.mode==='desktop'?'':ui.w+'px';
+ fr.className=(mob?'m':'')+(tb?' tb':'')+(ui.preview?' pv':'');fr.style.maxWidth=ui.w>=9999?'none':ui.w+'px';
  let st=$('#siteCss');if(!st){st=document.createElement('style');st.id='siteCss';document.head.appendChild(st)}
  st.textContent=SITE_CSS+HFCSS+mobRules('.site.m')+tabRules('.site.m.tb');
  const pgs=S.pages.filter(p=>!p.hidden);

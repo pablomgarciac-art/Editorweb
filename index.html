@@ -107,7 +107,7 @@ textarea{resize:vertical;min-height:64px}
 .pre:hover{border-color:var(--accent)}
 .pre small{color:var(--mute)}
 #stage{grid-area:stage;overflow:auto;padding:20px;min-width:0}
-#frame{margin:0 auto;max-width:1100px;width:100%;background:#fff;box-shadow:0 6px 28px rgba(10,20,40,.22);min-height:200px}
+#frame{margin:0 auto;max-width:1440px;width:100%;background:#fff;box-shadow:0 6px 28px rgba(10,20,40,.22);min-height:200px}
 #frame.m{max-width:390px}
 #frame.m.tb .sec:not(.locked) .sgrip{display:none!important}
 #frame.pv{box-shadow:0 6px 28px rgba(10,20,40,.22)}
@@ -638,8 +638,8 @@ function catAdd(k){
  }
 }
 /* ===== Render de la web (compartido por editor y publicación) ===== */
-let S,ui={panel:'elements',drawer:true,pageId:null,secId:null,elId:null,mode:'desktop',w:1100,preview:false};
-const DEVS={tablet:[['iPad vertical',768],['iPad Air / Pro 11″',834],['iPad Pro 12,9″ vertical',1024],['Tablet horizontal',1180]],mobile:[['Android pequeño',360],['iPhone SE',375],['iPhone 15',390],['Android normal (Pixel / Galaxy)',412],['iPhone Pro Max',430]]};
+let S,ui={panel:'elements',drawer:true,pageId:null,secId:null,elId:null,mode:'desktop',w:1440,preview:false};
+const DEVS={desktop:[['Compacto',1100],['Portátil',1280],['Escritorio',1440],['Pantalla grande',1680],['Todo el ancho',9999]],tablet:[['iPad vertical',768],['iPad Air / Pro 11″',834],['iPad Pro 12,9″ vertical',1024],['Tablet horizontal',1180]],mobile:[['Android pequeño',360],['iPhone SE',375],['iPhone 15',390],['Android normal (Pixel / Galaxy)',412],['iPhone Pro Max',430]]};
 const isStack=()=>ui.mode!=='desktop'&&ui.w<=900;
 
 const SITE_CSS=`
@@ -969,7 +969,7 @@ function loadProject(p){S=p;S.logo=S.logo||{on:true,src:'',h:38,name:true};const
 function renderBar(){
  const st=dirtyFlag?'Sin guardar':savedAt?'Guardado '+savedAt.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}):'';
  $('#bar').innerHTML=`<span class="brand"><i></i>Editor web</span>
- <div class="seg"><button class="b${ui.mode==='desktop'?' on':''}" data-act="mode" data-m="desktop" title="Vista de escritorio">${svg('desktop',16)}<span class="lbl">Escritorio</span></button><button class="b${ui.mode==='tablet'?' on':''}" data-act="mode" data-m="tablet" title="Vista de tablet">${svg('tablet',16)}<span class="lbl">Tablet</span></button><button class="b${ui.mode==='mobile'?' on':''}" data-act="mode" data-m="mobile" title="Vista móvil">${svg('mobile',16)}<span class="lbl">Móvil</span></button></div>${ui.mode!=='desktop'?`<label class="pgsel" title="Tamaño de pantalla"><select id="devSel" aria-label="Dispositivo">${DEVS[ui.mode].map(d=>`<option value="${d[1]}"${d[1]===ui.w?' selected':''}>${d[1]}px · ${d[0]}</option>`).join('')}</select></label>`:''}
+ <div class="seg"><button class="b${ui.mode==='desktop'?' on':''}" data-act="mode" data-m="desktop" title="Vista de escritorio">${svg('desktop',16)}<span class="lbl">Escritorio</span></button><button class="b${ui.mode==='tablet'?' on':''}" data-act="mode" data-m="tablet" title="Vista de tablet">${svg('tablet',16)}<span class="lbl">Tablet</span></button><button class="b${ui.mode==='mobile'?' on':''}" data-act="mode" data-m="mobile" title="Vista móvil">${svg('mobile',16)}<span class="lbl">Móvil</span></button></div>${true?`<label class="pgsel" title="Tamaño de pantalla"><select id="devSel" aria-label="Dispositivo">${DEVS[ui.mode].map(d=>`<option value="${d[1]}"${d[1]===ui.w?' selected':''}>${d[1]>=9999?d[0]:d[1]+'px · '+d[0]}</option>`).join('')}</select></label>`:''}
  <label class="pgsel" title="Ir a otra página">${svg('pages',18)}<select id="pgSel" aria-label="Página">${S.pages.map(p=>`<option value="${p.id}"${p.id===curPage().id?' selected':''}${p.hidden?' disabled':''}>${esc(p.name)}${p.hidden?' (oculta)':''}</option>`).join('')}</select></label>
  <span class="sp"></span><span class="stat">${st}</span>
  <button class="b" data-act="undo" title="Deshacer (Ctrl+Z)"${hist.length?'':' disabled'}>${svg('undo',16)}</button>
@@ -1146,7 +1146,7 @@ function floatLayers(pg){
 function renderCanvas(){
  const pg=curPage(),fr=$('#frame');
  const mob=isStack(),tb=mob&&ui.w>720;
- fr.className=(mob?'m':'')+(tb?' tb':'')+(ui.preview?' pv':'');fr.style.maxWidth=ui.mode==='desktop'?'':ui.w+'px';
+ fr.className=(mob?'m':'')+(tb?' tb':'')+(ui.preview?' pv':'');fr.style.maxWidth=ui.w>=9999?'none':ui.w+'px';
  let st=$('#siteCss');if(!st){st=document.createElement('style');st.id='siteCss';document.head.appendChild(st)}
  st.textContent=SITE_CSS+HFCSS+mobRules('.site.m')+tabRules('.site.m.tb');
  const pgs=S.pages.filter(p=>!p.hidden);
@@ -1227,7 +1227,7 @@ function openPublish(){
 function act(a,b){
  const id=b.dataset.id,pg=curPage();
  switch(a){
- case 'mode':ui.mode=b.dataset.m;ui.w=ui.mode==='desktop'?1100:(DEVS[ui.mode].find(d=>d[1]===ui.w)?ui.w:DEVS[ui.mode][ui.mode==='tablet'?0:1][1]);renderBar();renderCanvas();break;
+ case 'mode':ui.mode=b.dataset.m;ui.w=DEVS[ui.mode].find(d=>d[1]===ui.w)?ui.w:DEVS[ui.mode][ui.mode==='desktop'?2:ui.mode==='tablet'?0:2][1];renderBar();renderCanvas();break;
  case 'undo':undo();break;
  case 'redo':redo();break;
  case 'preview':ui.preview=!ui.preview;if(ui.preview){ui.elId=null;ui.secId=null}renderAll();break;

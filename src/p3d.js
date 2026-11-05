@@ -70,7 +70,7 @@ function openPublish(){
 function act(a,b){
  const id=b.dataset.id,pg=curPage();
  switch(a){
- case 'mode':ui.mode=b.dataset.m;ui.w=ui.mode==='desktop'?1100:(DEVS[ui.mode].find(d=>d[1]===ui.w)?ui.w:DEVS[ui.mode][ui.mode==='tablet'?0:1][1]);renderBar();renderCanvas();break;
+ case 'mode':ui.mode=b.dataset.m;ui.w=DEVS[ui.mode].find(d=>d[1]===ui.w)?ui.w:DEVS[ui.mode][ui.mode==='desktop'?2:ui.mode==='tablet'?0:2][1];renderBar();renderCanvas();break;
  case 'undo':undo();break;
  case 'redo':redo();break;
  case 'preview':ui.preview=!ui.preview;if(ui.preview){ui.elId=null;ui.secId=null}renderAll();break;

@@ -1,6 +1,6 @@
 /* ===== Render de la web (compartido por editor y publicación) ===== */
-let S,ui={panel:'elements',drawer:true,pageId:null,secId:null,elId:null,mode:'desktop',w:1100,preview:false};
-const DEVS={tablet:[['iPad vertical',768],['iPad Air / Pro 11″',834],['iPad Pro 12,9″ vertical',1024],['Tablet horizontal',1180]],mobile:[['Android pequeño',360],['iPhone SE',375],['iPhone 15',390],['Android normal (Pixel / Galaxy)',412],['iPhone Pro Max',430]]};
+let S,ui={panel:'elements',drawer:true,pageId:null,secId:null,elId:null,mode:'desktop',w:1440,preview:false};
+const DEVS={desktop:[['Compacto',1100],['Portátil',1280],['Escritorio',1440],['Pantalla grande',1680],['Todo el ancho',9999]],tablet:[['iPad vertical',768],['iPad Air / Pro 11″',834],['iPad Pro 12,9″ vertical',1024],['Tablet horizontal',1180]],mobile:[['Android pequeño',360],['iPhone SE',375],['iPhone 15',390],['Android normal (Pixel / Galaxy)',412],['iPhone Pro Max',430]]};
 const isStack=()=>ui.mode!=='desktop'&&ui.w<=900;
 
 const SITE_CSS=`
